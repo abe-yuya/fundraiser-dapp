@@ -1,4 +1,4 @@
-const SimpleStorageContract = artifacts.require("SimpleStorageContract");
+const SimpleStorageContract = artifacts.require("SimpleStorage");
 const FundraiserFactoryContract = artifacts.require("FundraiserFactory");
 
 /**

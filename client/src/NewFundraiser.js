@@ -32,29 +32,34 @@ const NewFundraiser = () => {
   const classes = useStyles();
 
   useEffect(() => {
+    const init = async() => {
+      try {
+        const web3 = await getWeb3();
+        const networkId = await web3.eth.net.getId();
+        const deployedNetwork = FundraiserFactoryContract.networks[networkId];
+        const accounts = await web3.eth.getAccounts();
+        const instance = new web3.eth.Contract(
+          FundraiserFactoryContract.abi,
+          deployedNetwork && deployedNetwork.address,
+        );
+  
+      
+        setContract(instance)
+        setAccounts(accounts)
+  
+      } catch(error) {
+        alert(
+          `Failed to load web3, accounts, or contract. Check console for details.`,
+        );
+        console.error(error);
+      }
+    }
+    init();
   }, []);
 
-  const init = async() => {
-    try {
-      const web3 = await getWeb3();
-      const networkId = await web3.eth.net.getId();
-      const deployedNetwork = FundraiserFactoryContract.networks[networkId];
-      const accounts = await web3.eth.getAccounts();
-      const instance = new web3.eth.Contract(
-        FundraiserFactoryContract.abi,
-        deployedNetwork && deployedNetwork.address,
-      );
-      setContract(instance);
-      setAccounts(accounts);
-    } catch(error) {
-      alert(
-        `Failed to load web3, accounts, or contract. Check console for details.`,
-      );
-      console.error(error);
-    }
-  }
-
   const handleSubmit = async () => {
+    console.log('きてる');
+    console.log(beneficiary);
     await contract.methods.createFundraiser(
       name,
       url,
